@@ -5,7 +5,7 @@ jobs:
     steps:
       - name: change working directory
         run: |
-          cd ./WebApplication1/WebApplication1
+          cd WebApplication1/WebApplication1
       - name: dotnet outdated action
         uses: MCLD/dotnet-outdated-action@v4.1
         
