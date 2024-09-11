@@ -4,7 +4,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: change working directory
-        working-directory: ./WebApplication1/WebApplication1
+        run: |
+          cd ./WebApplication1/WebApplication1
       - name: dotnet outdated action
         uses: MCLD/dotnet-outdated-action@v4.1
         
