@@ -1,0 +1,198 @@
+{
+  "version": "2.2.0",
+  "summary": {
+    "title": "Save Snippet Feature",
+    "owner": "Core Repl Security Team",
+    "description": "Threat model for snippet persistence feature in DotNetDojo REPL",
+    "id": 1
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": [
+      {
+        "id": 1,
+        "title": "Save Snippet Feature — STRIDE",
+        "diagramType": "Threat Model Diagram",
+        "version": "2.4.1",
+        "cells": [
+          {
+            "position": {"x": 0, "y": 0},
+            "size": {"width": 400, "height": 540},
+            "shape": "trust-boundary-box",
+            "zIndex": -1,
+            "id": "90d1f2a3-b4c5-4d6e-8f9a-0b1c2d3e4f5a",
+            "data": {"type": "tm.BoundaryBox", "name": "Browser Runtime", "isTrustBoundary": true, "hasOpenThreats": false}
+          },
+          {
+            "position": {"x": 480, "y": 0},
+            "size": {"width": 540, "height": 540},
+            "shape": "trust-boundary-box",
+            "zIndex": -1,
+            "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+            "data": {"type": "tm.BoundaryBox", "name": "DotNetDojo Web App", "isTrustBoundary": true, "hasOpenThreats": true},
+            "attrs": {"body": {"stroke": "red", "strokeWidth": 2.5}}
+          },
+          {
+            "position": {"x": 1140, "y": 0},
+            "size": {"width": 300, "height": 540},
+            "shape": "trust-boundary-box",
+            "zIndex": -1,
+            "id": "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
+            "data": {"type": "tm.BoundaryBox", "name": "Azure Storage", "isTrustBoundary": true, "hasOpenThreats": false},
+            "attrs": {"body": {"strokeDasharray": "4 3"}}
+          },
+          {
+            "position": {"x": 60, "y": 120},
+            "size": {"width": 120, "height": 100},
+            "shape": "actor",
+            "zIndex": 3,
+            "id": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
+            "attrs": {"body": {"stroke": "black", "strokeWidth": 1.5}, "label": {"text": "End User"}},
+            "data": {"type": "tm.Actor", "name": "End User", "hasOpenThreats": false}
+          },
+          {
+            "position": {"x": 540, "y": 60},
+            "size": {"width": 140, "height": 80},
+            "shape": "process",
+            "zIndex": 5,
+            "id": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a",
+            "attrs": {"body": {"stroke": "red", "strokeWidth": 2.5}, "label": {"text": "SaveSnippetAsync"}},
+            "data": {"type": "tm.Process", "name": "SaveSnippetAsync", "hasOpenThreats": true,
+              "threats": [
+                {"id": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b", "title": "SaveAsync Missing CSRF Protection", "status": "Open", "severity": "High", "type": "Spoofing", "description": "SaveAsync method lacks ValidateAntiForgeryToken attribute, allowing CSRF attacks", "mitigation": "Add [ValidateAntiForgeryToken] to SaveAsync method", "modelType": "STRIDE", "number": 1, "score": "8.2"},
+                {"id": "f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8a9b0c", "title": "Malicious Code Submission", "status": "Open", "severity": "Medium", "type": "Abuse", "description": "User can submit arbitrary C# code that may exploit RazorParser sandbox or downstream consumers", "mitigation": "Validate snippet syntax, restrict dangerous namespaces, sandbox parser execution", "modelType": "STRIDE", "number": 2, "score": "6.5"}
+              ]
+            }
+          },
+          {
+            "position": {"x": 540, "y": 200},
+            "size": {"width": 140, "height": 80},
+            "shape": "process",
+            "zIndex": 5,
+            "id": "a7b8c9d0-e1f2-4a3b-4c5d-6e7f8a9b0c1d",
+            "attrs": {"body": {"stroke": "black", "strokeWidth": 1.5}, "label": {"text": "SnippetBuilder"}},
+            "data": {"type": "tm.Process", "name": "SnippetBuilder.BuildView", "hasOpenThreats": false}
+          },
+          {
+            "position": {"x": 540, "y": 340},
+            "size": {"width": 140, "height": 80},
+            "shape": "process",
+            "zIndex": 5,
+            "id": "b8c9d0e1-f2a3-4b4c-5d6e-7f8a9b0c1d2e",
+            "attrs": {"body": {"stroke": "red", "strokeWidth": 2.5}, "label": {"text": "SnippetsService"}},
+            "data": {"type": "tm.Process", "name": "CreateSnippetAsync", "hasOpenThreats": true,
+              "threats": [
+                {"id": "c9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f", "title": "IP Spoofing for Rate Limit Bypass", "status": "Open", "severity": "Medium", "type": "Spoofing", "description": "X-Forwarded-For or RemoteIpAddress can be spoofed if reverse proxy not properly configured", "mitigation": "Validate IP through trusted reverse proxy, implement rate limiting at infrastructure level", "modelType": "STRIDE", "number": 3, "score": "6.8"},
+                {"id": "d0e1f2a3-b4c5-4d6e-7f8a-9b0c1d2e3f4a", "title": "No Audit Trail", "status": "Open", "severity": "Medium", "type": "Repudiation", "description": "Snippet creation not logged; cannot audit who created what snippet when", "mitigation": "Log all snippet creations with IP, timestamp, content hash to audit log", "modelType": "STRIDE", "number": 4, "score": "5.5"}
+              ]
+            }
+          },
+          {
+            "position": {"x": 780, "y": 340},
+            "size": {"width": 140, "height": 80},
+            "shape": "process",
+            "zIndex": 5,
+            "id": "e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5b",
+            "attrs": {"body": {"stroke": "black", "strokeWidth": 1.5}, "label": {"text": "BlobStorageService"}},
+            "data": {"type": "tm.Process", "name": "UploadFromByteArrayAsync", "hasOpenThreats": false}
+          },
+          {
+            "position": {"x": 1180, "y": 80},
+            "size": {"width": 100, "height": 80},
+            "shape": "store",
+            "zIndex": 1,
+            "id": "f2a3b4c5-d6e7-4f8a-9b0c-1d2e3f4a5b6c",
+            "attrs": {"body": {"stroke": "black", "strokeWidth": 1.5}, "label": {"text": "Banned IP Store"}},
+            "data": {"type": "tm.Store", "name": "Banned IP Store", "hasOpenThreats": false}
+          },
+          {
+            "position": {"x": 1180, "y": 240},
+            "size": {"width": 100, "height": 80},
+            "shape": "store",
+            "zIndex": 1,
+            "id": "a3b4c5d6-e7f8-4a9b-0c1d-2e3f4a5b6c7d",
+            "attrs": {"body": {"stroke": "black", "strokeWidth": 1.5}, "label": {"text": "Snippet Blobs"}},
+            "data": {"type": "tm.Store", "name": "Azure Blob Storage (Snippets)", "hasOpenThreats": false}
+          },
+          {
+            "position": {"x": 120, "y": 280},
+            "size": {"width": 140, "height": 60},
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "b4c5d6e7-f8a9-4b0c-1d2e-3f4a5b6c7d8e",
+            "source": {"cell": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f", "anchor": {"name": "topRight", "args": {}}},
+            "target": {"cell": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a", "anchor": {"name": "topLeft", "args": {}}},
+            "attrs": {"line": {"stroke": "black", "strokeWidth": 1.5, "targetMarker": {"name": "classic"}}, "label": {"text": "SnippetModel + IP"}},
+            "data": {"type": "tm.Flow", "name": "DF01", "isResponse": false}
+          },
+          {
+            "position": {"x": 540, "y": 150},
+            "size": {"width": 140, "height": 60},
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "c5d6e7f8-a9b0-4c1d-2e3f-4a5b6c7d8e9f",
+            "source": {"cell": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a", "anchor": {"name": "bottom", "args": {}}},
+            "target": {"cell": "a7b8c9d0-e1f2-4a3b-4c5d-6e7f8a9b0c1d", "anchor": {"name": "top", "args": {}}},
+            "attrs": {"line": {"stroke": "black", "strokeWidth": 1.5, "targetMarker": {"name": "classic"}}, "label": {"text": "Build View"}},
+            "data": {"type": "tm.Flow", "name": "DF02", "isResponse": false}
+          },
+          {
+            "position": {"x": 540, "y": 290},
+            "size": {"width": 140, "height": 60},
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "d6e7f8a9-b0c1-4d2e-3f4a-5b6c7d8e9f0a",
+            "source": {"cell": "a7b8c9d0-e1f2-4a3b-4c5d-6e7f8a9b0c1d", "anchor": {"name": "bottom", "args": {}}},
+            "target": {"cell": "b8c9d0e1-f2a3-4b4c-5d6e-7f8a9b0c1d2e", "anchor": {"name": "top", "args": {}}},
+            "attrs": {"line": {"stroke": "black", "strokeWidth": 1.5, "targetMarker": {"name": "classic"}}, "label": {"text": "Serialized Content"}},
+            "data": {"type": "tm.Flow", "name": "DF03", "isResponse": false}
+          },
+          {
+            "position": {"x": 1180, "y": 100},
+            "size": {"width": 140, "height": 60},
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "e7f8a9b0-c1d2-4e3f-4a5b-6c7d8e9f0a1b",
+            "source": {"cell": "b8c9d0e1-f2a3-4b4c-5d6e-7f8a9b0c1d2e", "anchor": {"name": "right", "args": {}}},
+            "target": {"cell": "f2a3b4c5-d6e7-4f8a-9b0c-1d2e3f4a5b6c", "anchor": {"name": "left", "args": {}}},
+            "attrs": {"line": {"stroke": "black", "strokeWidth": 1.5, "targetMarker": {"name": "classic"}}, "label": {"text": "Check IP Ban"}},
+            "data": {"type": "tm.Flow", "name": "DF04", "isResponse": false}
+          },
+          {
+            "position": {"x": 780, "y": 380},
+            "size": {"width": 140, "height": 60},
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "f8a9b0c1-d2e3-4f4a-5b6c-7d8e9f0a1b2c",
+            "source": {"cell": "b8c9d0e1-f2a3-4b4c-5d6e-7f8a9b0c1d2e", "anchor": {"name": "bottom", "args": {}}},
+            "target": {"cell": "e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5b", "anchor": {"name": "bottom", "args": {}}},
+            "attrs": {"line": {"stroke": "black", "strokeWidth": 1.5, "targetMarker": {"name": "classic"}}, "label": {"text": "Byte Array"}},
+            "data": {"type": "tm.Flow", "name": "DF05", "isResponse": false}
+          },
+          {
+            "position": {"x": 920, "y": 280},
+            "size": {"width": 140, "height": 60},
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "a9b0c1d2-e3f4-4a5b-6c7d-8e9f0a1b2c3d",
+            "source": {"cell": "e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5b", "anchor": {"name": "right", "args": {}}},
+            "target": {"cell": "a3b4c5d6-e7f8-4a9b-0c1d-2e3f4a5b6c7d", "anchor": {"name": "left", "args": {}}},
+            "attrs": {"line": {"stroke": "black", "strokeWidth": 1.5, "targetMarker": {"name": "classic"}}, "label": {"text": "Store Blob"}},
+            "data": {"type": "tm.Flow", "name": "DF06", "isResponse": false}
+          },
+          {
+            "position": {"x": 120, "y": 80},
+            "size": {"width": 140, "height": 60},
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "b0c1d2e3-f4a5-4b6c-7d8e-9f0a1b2c3d4e",
+            "source": {"cell": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a", "anchor": {"name": "topLeft", "args": {}}},
+            "target": {"cell": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f", "anchor": {"name": "bottomRight", "args": {}}},
+            "attrs": {"line": {"stroke": "black", "strokeWidth": 1.5, "sourceMarker": {"name": "classic"}}, "label": {"text": "CreateSnippetResponse"}},
+            "data": {"type": "tm.Flow", "name": "DF07", "isResponse": true}
+          }
+        ]
+      }
+    ]
+  }
+}
