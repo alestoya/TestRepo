@@ -1,0 +1,480 @@
+{
+  "version": "2.3.0",
+  "summary": {
+    "title": "REST API Authentication Flow",
+    "owner": "Core Repl Security Team",
+    "description": "Threat model for REST API authentication and request-gating flow in DotNetDojo",
+    "id": 2
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": [
+      {
+        "id": 2,
+        "title": "REST API Authentication Flow — STRIDE",
+        "diagramType": "STRIDE",
+        "version": "2.3.0",
+        "description": "Auth flow from browser antiforgery token to web and parser host-gating controls",
+        "thumbnail": "./public/content/images/thumbnail.stride.jpg",
+        "size": {
+          "height": 560,
+          "width": 1540
+        },
+        "diagramJson": {
+          "cells": []
+        },
+        "cells": [
+          {
+            "position": { "x": 0, "y": 0 },
+            "size": { "width": 360, "height": 540 },
+            "shape": "trust-boundary-box",
+            "zIndex": -1,
+            "id": "boundary-browser",
+            "visible": true,
+            "attrs": {
+              "body": { "stroke": "black", "strokeWidth": 2, "fill": "transparent" },
+              "label": { "text": "Client Browser", "fontSize": 12, "fill": "black" }
+            },
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "Client Browser",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": { "x": 380, "y": 0 },
+            "size": { "width": 620, "height": 540 },
+            "shape": "trust-boundary-box",
+            "zIndex": -1,
+            "id": "boundary-web",
+            "visible": true,
+            "attrs": {
+              "body": { "stroke": "black", "strokeWidth": 2, "fill": "transparent" },
+              "label": { "text": "DotNetDojo Web App", "fontSize": 12, "fill": "black" }
+            },
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "DotNetDojo Web App",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": { "x": 1020, "y": 0 },
+            "size": { "width": 240, "height": 540 },
+            "shape": "trust-boundary-box",
+            "zIndex": -1,
+            "id": "boundary-proxy",
+            "visible": true,
+            "attrs": {
+              "body": { "stroke": "black", "strokeWidth": 2, "fill": "transparent" },
+              "label": { "text": "Reverse Proxy Channel", "fontSize": 12, "fill": "black" }
+            },
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "Reverse Proxy Channel",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": { "x": 1280, "y": 0 },
+            "size": { "width": 260, "height": 540 },
+            "shape": "trust-boundary-box",
+            "zIndex": -1,
+            "id": "boundary-parser",
+            "visible": true,
+            "attrs": {
+              "body": { "stroke": "black", "strokeWidth": 2, "fill": "transparent" },
+              "label": { "text": "Razor Parser Service", "fontSize": 12, "fill": "black" }
+            },
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "Razor Parser Service Runtime",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": { "x": 70, "y": 360 },
+            "size": { "width": 140, "height": 100 },
+            "shape": "actor",
+            "zIndex": 3,
+            "id": "actor-user",
+            "visible": true,
+            "attrs": {
+              "body": { "stroke": "black", "strokeWidth": 1.5, "fill": "white" },
+              "label": { "text": "End User", "fontSize": 11, "fill": "black" }
+            },
+            "data": {
+              "type": "tm.Actor",
+              "name": "End User",
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": { "x": 90, "y": 210 },
+            "size": { "width": 180, "height": 100 },
+            "shape": "process",
+            "zIndex": 5,
+            "id": "process-browser-token",
+            "visible": true,
+            "attrs": {
+              "body": { "stroke": "red", "strokeWidth": 2.5, "fill": "white" },
+              "label": { "text": "Browser Token Injector", "fontSize": 11, "fill": "black" }
+            },
+            "data": {
+              "type": "tm.Process",
+              "name": "Browser Token Injector",
+              "hasOpenThreats": true,
+              "threats": [
+                {
+                  "id": "threat-token-exfiltration",
+                  "title": "Token Exfiltration via Script Compromise",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Information Disclosure",
+                  "description": "Antiforgery token is accessible in DOM and can be stolen by compromised same-origin script.",
+                  "mitigation": "Add CSP and SRI hardening for script trust and reduce token exposure windows.",
+                  "modelType": "STRIDE",
+                  "number": 1,
+                  "score": "8.1"
+                }
+              ]
+            }
+          },
+          {
+            "position": { "x": 440, "y": 210 },
+            "size": { "width": 220, "height": 100 },
+            "shape": "process",
+            "zIndex": 5,
+            "id": "process-snippet-auth",
+            "visible": true,
+            "attrs": {
+              "body": { "stroke": "red", "strokeWidth": 2.5, "fill": "white" },
+              "label": { "text": "SnippetController Validation", "fontSize": 11, "fill": "black" }
+            },
+            "data": {
+              "type": "tm.Process",
+              "name": "SnippetController Token Validation",
+              "hasOpenThreats": true,
+              "threats": [
+                {
+                  "id": "threat-saveasync-csrf",
+                  "title": "SaveAsync Missing CSRF Protection",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Spoofing",
+                  "description": "SaveAsync accepts POST input without ValidateAntiForgeryToken.",
+                  "mitigation": "Add ValidateAntiForgeryToken or retire SaveAsync path.",
+                  "modelType": "STRIDE",
+                  "number": 2,
+                  "score": "8.3"
+                },
+                {
+                  "id": "threat-protected-endpoints-csrf",
+                  "title": "CSRF on Protected Endpoints",
+                  "status": "Mitigated",
+                  "severity": "Low",
+                  "type": "Spoofing",
+                  "description": "Mutating endpoints are exposed to browser-origin attacks.",
+                  "mitigation": "ParseSnippetAsync and SaveSnippetAsync enforce ValidateAntiForgeryToken.",
+                  "modelType": "STRIDE",
+                  "number": 3,
+                  "score": "3.1"
+                }
+              ]
+            }
+          },
+          {
+            "position": { "x": 700, "y": 210 },
+            "size": { "width": 220, "height": 100 },
+            "shape": "process",
+            "zIndex": 5,
+            "id": "process-web-filter",
+            "visible": true,
+            "attrs": {
+              "body": { "stroke": "red", "strokeWidth": 2.5, "fill": "white" },
+              "label": { "text": "Web RestrictDomain Filter", "fontSize": 11, "fill": "black" }
+            },
+            "data": {
+              "type": "tm.Process",
+              "name": "Web RestrictDomain Filter",
+              "hasOpenThreats": true,
+              "threats": [
+                {
+                  "id": "threat-host-header-bypass",
+                  "title": "Host Header Trust Bypass",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Spoofing",
+                  "description": "Filter relies on host allowlist and can be bypassed if upstream proxy host handling is weak.",
+                  "mitigation": "Enforce trusted proxy forwarding and strict host normalization.",
+                  "modelType": "STRIDE",
+                  "number": 4,
+                  "score": "7.7"
+                }
+              ]
+            }
+          },
+          {
+            "position": { "x": 740, "y": 60 },
+            "size": { "width": 180, "height": 80 },
+            "shape": "store",
+            "zIndex": 1,
+            "id": "store-allowed-hosts",
+            "visible": true,
+            "attrs": {
+              "body": { "stroke": "black", "strokeWidth": 1.5, "fill": "white" },
+              "topLine": { "strokeWidth": 1.5, "strokeDasharray": null },
+              "bottomLine": { "strokeWidth": 1.5, "strokeDasharray": null },
+              "label": { "text": "Allowed Host Config", "fontSize": 11, "fill": "black" }
+            },
+            "data": {
+              "type": "tm.Store",
+              "name": "Allowed Host Configuration",
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": { "x": 1040, "y": 210 },
+            "size": { "width": 200, "height": 100 },
+            "shape": "process",
+            "zIndex": 5,
+            "id": "process-proxy-gate",
+            "visible": true,
+            "attrs": {
+              "body": { "stroke": "red", "strokeWidth": 2.5, "fill": "white" },
+              "label": { "text": "YARP Proxy Host Gate", "fontSize": 11, "fill": "black" }
+            },
+            "data": {
+              "type": "tm.Process",
+              "name": "YARP Proxy Host Gate",
+              "hasOpenThreats": true,
+              "threats": [
+                {
+                  "id": "threat-proxy-abuse",
+                  "title": "Proxy Catch-all Abuse",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Abuse",
+                  "description": "Catch-all proxy path can be used for parser endpoint probing from allowed hosts.",
+                  "mitigation": "Constrain route patterns and add parser path intent checks.",
+                  "modelType": "STRIDE",
+                  "number": 5,
+                  "score": "6.1"
+                }
+              ]
+            }
+          },
+          {
+            "position": { "x": 1320, "y": 210 },
+            "size": { "width": 200, "height": 100 },
+            "shape": "process",
+            "zIndex": 5,
+            "id": "process-parser-filter",
+            "visible": true,
+            "attrs": {
+              "body": { "stroke": "red", "strokeWidth": 2.5, "fill": "white" },
+              "label": { "text": "Parser RestrictDomain Filter", "fontSize": 11, "fill": "black" }
+            },
+            "data": {
+              "type": "tm.Process",
+              "name": "RazorParser RestrictDomain Filter",
+              "hasOpenThreats": true,
+              "threats": [
+                {
+                  "id": "threat-no-service-auth",
+                  "title": "Missing Strong Service Authentication",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Spoofing",
+                  "description": "Parser trust is host-based and lacks a separate inter-service auth assertion.",
+                  "mitigation": "Add signed internal authentication header or mTLS assertion.",
+                  "modelType": "STRIDE",
+                  "number": 6,
+                  "score": "6.4"
+                }
+              ]
+            }
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-user-to-browser",
+            "visible": true,
+            "source": { "cell": "actor-user", "anchor": { "name": "top" } },
+            "target": { "cell": "process-browser-token", "anchor": { "name": "bottom" } },
+            "attrs": {
+              "line": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "targetMarker": { "name": "classic" }
+              }
+            },
+            "labels": [
+              {
+                "markup": [
+                  { "tagName": "ellipse", "selector": "labelBody" },
+                  { "tagName": "text", "selector": "labelText" }
+                ],
+                "attrs": {
+                  "labelText": { "text": "DF01 User action", "textAnchor": "middle", "textVerticalAnchor": "middle" },
+                  "labelBody": { "ref": "labelText", "refRx": "50%", "refRy": "60%", "fill": "#fff", "strokeWidth": 0 }
+                },
+                "position": 0.5
+              }
+            ],
+            "data": { "type": "tm.Flow", "name": "DF01", "isResponse": false }
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-browser-to-snippet",
+            "visible": true,
+            "source": { "cell": "process-browser-token", "anchor": { "name": "right" } },
+            "target": { "cell": "process-snippet-auth", "anchor": { "name": "left" } },
+            "attrs": {
+              "line": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "targetMarker": { "name": "classic" }
+              }
+            },
+            "labels": [
+              {
+                "markup": [
+                  { "tagName": "ellipse", "selector": "labelBody" },
+                  { "tagName": "text", "selector": "labelText" }
+                ],
+                "attrs": {
+                  "labelText": { "text": "DF02 POST + token", "textAnchor": "middle", "textVerticalAnchor": "middle" },
+                  "labelBody": { "ref": "labelText", "refRx": "50%", "refRy": "60%", "fill": "#fff", "strokeWidth": 0 }
+                },
+                "position": 0.5
+              }
+            ],
+            "data": { "type": "tm.Flow", "name": "DF02", "isResponse": false }
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-snippet-to-filter",
+            "visible": true,
+            "source": { "cell": "process-snippet-auth", "anchor": { "name": "right" } },
+            "target": { "cell": "process-web-filter", "anchor": { "name": "left" } },
+            "attrs": {
+              "line": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "targetMarker": { "name": "classic" }
+              }
+            },
+            "labels": [
+              {
+                "markup": [
+                  { "tagName": "ellipse", "selector": "labelBody" },
+                  { "tagName": "text", "selector": "labelText" }
+                ],
+                "attrs": {
+                  "labelText": { "text": "DF03 Request gating", "textAnchor": "middle", "textVerticalAnchor": "middle" },
+                  "labelBody": { "ref": "labelText", "refRx": "50%", "refRy": "60%", "fill": "#fff", "strokeWidth": 0 }
+                },
+                "position": 0.5
+              }
+            ],
+            "data": { "type": "tm.Flow", "name": "DF03", "isResponse": false }
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-hosts-to-filter",
+            "visible": true,
+            "source": { "cell": "store-allowed-hosts", "anchor": { "name": "bottom" } },
+            "target": { "cell": "process-web-filter", "anchor": { "name": "top" } },
+            "attrs": {
+              "line": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "targetMarker": { "name": "classic" }
+              }
+            },
+            "labels": [
+              {
+                "markup": [
+                  { "tagName": "ellipse", "selector": "labelBody" },
+                  { "tagName": "text", "selector": "labelText" }
+                ],
+                "attrs": {
+                  "labelText": { "text": "DF04 Allowlist lookup", "textAnchor": "middle", "textVerticalAnchor": "middle" },
+                  "labelBody": { "ref": "labelText", "refRx": "50%", "refRy": "60%", "fill": "#fff", "strokeWidth": 0 }
+                },
+                "position": 0.5
+              }
+            ],
+            "data": { "type": "tm.Flow", "name": "DF04", "isResponse": false }
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-filter-to-proxy",
+            "visible": true,
+            "source": { "cell": "process-web-filter", "anchor": { "name": "right" } },
+            "target": { "cell": "process-proxy-gate", "anchor": { "name": "left" } },
+            "attrs": {
+              "line": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "targetMarker": { "name": "classic" }
+              }
+            },
+            "labels": [
+              {
+                "markup": [
+                  { "tagName": "ellipse", "selector": "labelBody" },
+                  { "tagName": "text", "selector": "labelText" }
+                ],
+                "attrs": {
+                  "labelText": { "text": "DF05 Forwarded request", "textAnchor": "middle", "textVerticalAnchor": "middle" },
+                  "labelBody": { "ref": "labelText", "refRx": "50%", "refRy": "60%", "fill": "#fff", "strokeWidth": 0 }
+                },
+                "position": 0.5
+              }
+            ],
+            "data": { "type": "tm.Flow", "name": "DF05", "isResponse": false }
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-proxy-to-parser",
+            "visible": true,
+            "source": { "cell": "process-proxy-gate", "anchor": { "name": "right" } },
+            "target": { "cell": "process-parser-filter", "anchor": { "name": "left" } },
+            "attrs": {
+              "line": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "targetMarker": { "name": "classic" }
+              }
+            },
+            "labels": [
+              {
+                "markup": [
+                  { "tagName": "ellipse", "selector": "labelBody" },
+                  { "tagName": "text", "selector": "labelText" }
+                ],
+                "attrs": {
+                  "labelText": { "text": "DF06 Proxy dispatch", "textAnchor": "middle", "textVerticalAnchor": "middle" },
+                  "labelBody": { "ref": "labelText", "refRx": "50%", "refRy": "60%", "fill": "#fff", "strokeWidth": 0 }
+                },
+                "position": 0.5
+              }
+            ],
+            "data": { "type": "tm.Flow", "name": "DF06", "isResponse": false }
+          }
+        ]
+      }
+    ]
+  }
+}
