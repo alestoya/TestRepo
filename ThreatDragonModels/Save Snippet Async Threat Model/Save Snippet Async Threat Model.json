@@ -1,0 +1,413 @@
+{
+  "version": "2.3.0",
+  "summary": {
+    "title": "Save Snippet Feature",
+    "owner": "Core Repl Security Team",
+    "description": "Threat model for snippet persistence feature in DotNetDojo REPL",
+    "id": 1
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": [
+      {
+        "id": 1,
+        "title": "Save Snippet Feature — STRIDE",
+        "diagramType": "STRIDE",
+        "version": "2.3.0",
+        "description": "Threat model for save snippet feature",
+        "thumbnail": "./public/content/images/thumbnail.stride.jpg",
+        "size": {"height": 500, "width": 1350},
+        "diagramJson": {"cells": []},
+        "cells": [
+          {
+            "position": {"x": 0, "y": 0},
+            "size": {"width": 400, "height": 480},
+            "shape": "trust-boundary-box",
+            "zIndex": -1,
+            "id": "boundary-browser",
+            "visible": true,
+            "attrs": {
+              "body": {"stroke": "black", "strokeWidth": 2, "fill": "transparent"},
+              "label": {"text": "Browser Runtime", "fontSize": 12, "fill": "black"}
+            },
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "Browser Runtime",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": {"x": 420, "y": 0},
+            "size": {"width": 540, "height": 480},
+            "shape": "trust-boundary-box",
+            "zIndex": -1,
+            "id": "boundary-webapp",
+            "visible": true,
+            "attrs": {
+              "body": {"stroke": "red", "strokeWidth": 2.5, "fill": "transparent"},
+              "label": {"text": "DotNetDojo Web App", "fontSize": 12, "fill": "black"}
+            },
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "DotNetDojo Web App",
+              "isTrustBoundary": true,
+              "hasOpenThreats": true
+            }
+          },
+          {
+            "position": {"x": 1000, "y": 0},
+            "size": {"width": 300, "height": 480},
+            "shape": "trust-boundary-box",
+            "zIndex": -1,
+            "id": "boundary-azure",
+            "visible": true,
+            "attrs": {
+              "body": {"stroke": "black", "strokeWidth": 2, "fill": "transparent", "strokeDasharray": "4 3"},
+              "label": {"text": "Azure Storage", "fontSize": 12, "fill": "black"}
+            },
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "Azure Storage",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false,
+              "outOfScope": true
+            }
+          },
+          {
+            "position": {"x": 60, "y": 120},
+            "size": {"width": 120, "height": 100},
+            "shape": "actor",
+            "zIndex": 3,
+            "id": "actor-user",
+            "visible": true,
+            "attrs": {
+              "body": {"stroke": "black", "strokeWidth": 1.5, "fill": "white"},
+              "label": {"text": "End User", "fontSize": 11, "fill": "black"}
+            },
+            "ports": {
+              "groups": {
+                "top": {"position": "top", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "right": {"position": "right", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "bottom": {"position": "bottom", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "left": {"position": "left", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}}
+              },
+              "items": [
+                {"group": "top", "id": "port-user-top"},
+                {"group": "right", "id": "port-user-right"},
+                {"group": "bottom", "id": "port-user-bottom"},
+                {"group": "left", "id": "port-user-left"}
+              ]
+            },
+            "data": {"type": "tm.Actor", "name": "End User", "hasOpenThreats": false}
+          },
+          {
+            "position": {"x": 480, "y": 60},
+            "size": {"width": 140, "height": 100},
+            "shape": "process",
+            "zIndex": 5,
+            "id": "process-savesnippet",
+            "visible": true,
+            "attrs": {
+              "body": {"stroke": "red", "strokeWidth": 2.5, "fill": "white"},
+              "label": {"text": "SaveSnippetAsync", "fontSize": 11, "fill": "black"}
+            },
+            "ports": {
+              "groups": {
+                "top": {"position": "top", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "right": {"position": "right", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "bottom": {"position": "bottom", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "left": {"position": "left", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}}
+              },
+              "items": [
+                {"group": "top", "id": "port-save-top"},
+                {"group": "right", "id": "port-save-right"},
+                {"group": "bottom", "id": "port-save-bottom"},
+                {"group": "left", "id": "port-save-left"}
+              ]
+            },
+            "data": {
+              "type": "tm.Process",
+              "name": "SaveSnippetAsync",
+              "hasOpenThreats": true,
+              "threats": [
+                {
+                  "id": "threat-csrf-saveasync",
+                  "title": "SaveAsync Missing CSRF Protection",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Spoofing",
+                  "description": "SaveAsync endpoint lacks [ValidateAntiForgeryToken] attribute, allowing CSRF attacks",
+                  "mitigation": "Add [ValidateAntiForgeryToken] to SaveAsync method",
+                  "modelType": "STRIDE",
+                  "number": 1,
+                  "score": "8.2"
+                },
+                {
+                  "id": "threat-malicious-code",
+                  "title": "Malicious Code Submission",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Abuse",
+                  "description": "User can submit arbitrary C# code that exploits RazorParser",
+                  "mitigation": "Validate syntax, restrict namespaces, enforce sandbox",
+                  "modelType": "STRIDE",
+                  "number": 2,
+                  "score": "6.5"
+                }
+              ]
+            }
+          },
+          {
+            "position": {"x": 480, "y": 200},
+            "size": {"width": 140, "height": 100},
+            "shape": "process",
+            "zIndex": 5,
+            "id": "process-snippetbuilder",
+            "visible": true,
+            "attrs": {
+              "body": {"stroke": "black", "strokeWidth": 1.5, "fill": "white"},
+              "label": {"text": "SnippetBuilder", "fontSize": 11, "fill": "black"}
+            },
+            "ports": {
+              "groups": {
+                "top": {"position": "top", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "right": {"position": "right", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "bottom": {"position": "bottom", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "left": {"position": "left", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}}
+              },
+              "items": [
+                {"group": "top", "id": "port-builder-top"},
+                {"group": "right", "id": "port-builder-right"},
+                {"group": "bottom", "id": "port-builder-bottom"},
+                {"group": "left", "id": "port-builder-left"}
+              ]
+            },
+            "data": {"type": "tm.Process", "name": "SnippetBuilder.BuildView", "hasOpenThreats": false}
+          },
+          {
+            "position": {"x": 480, "y": 340},
+            "size": {"width": 140, "height": 100},
+            "shape": "process",
+            "zIndex": 5,
+            "id": "process-snippetsservice",
+            "visible": true,
+            "attrs": {
+              "body": {"stroke": "red", "strokeWidth": 2.5, "fill": "white"},
+              "label": {"text": "SnippetsService", "fontSize": 11, "fill": "black"}
+            },
+            "ports": {
+              "groups": {
+                "top": {"position": "top", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "right": {"position": "right", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "bottom": {"position": "bottom", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "left": {"position": "left", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}}
+              },
+              "items": [
+                {"group": "top", "id": "port-service-top"},
+                {"group": "right", "id": "port-service-right"},
+                {"group": "bottom", "id": "port-service-bottom"},
+                {"group": "left", "id": "port-service-left"}
+              ]
+            },
+            "data": {
+              "type": "tm.Process",
+              "name": "CreateSnippetAsync",
+              "hasOpenThreats": true,
+              "threats": [
+                {
+                  "id": "threat-ip-spoofing",
+                  "title": "IP Spoofing for Rate Limit Bypass",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Spoofing",
+                  "description": "X-Forwarded-For can be spoofed if proxy misconfigured",
+                  "mitigation": "Validate IP through trusted proxy only",
+                  "modelType": "STRIDE",
+                  "number": 3,
+                  "score": "6.8"
+                },
+                {
+                  "id": "threat-no-audit",
+                  "title": "No Audit Trail",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Repudiation",
+                  "description": "Snippet creation not logged",
+                  "mitigation": "Log all creations with IP, timestamp, hash",
+                  "modelType": "STRIDE",
+                  "number": 4,
+                  "score": "5.5"
+                }
+              ]
+            }
+          },
+          {
+            "position": {"x": 720, "y": 340},
+            "size": {"width": 140, "height": 100},
+            "shape": "process",
+            "zIndex": 5,
+            "id": "process-blobservice",
+            "visible": true,
+            "attrs": {
+              "body": {"stroke": "black", "strokeWidth": 1.5, "fill": "white"},
+              "label": {"text": "BlobStorageService", "fontSize": 11, "fill": "black"}
+            },
+            "ports": {
+              "groups": {
+                "top": {"position": "top", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "right": {"position": "right", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "bottom": {"position": "bottom", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "left": {"position": "left", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}}
+              },
+              "items": [
+                {"group": "top", "id": "port-blob-top"},
+                {"group": "right", "id": "port-blob-right"},
+                {"group": "bottom", "id": "port-blob-bottom"},
+                {"group": "left", "id": "port-blob-left"}
+              ]
+            },
+            "data": {"type": "tm.Process", "name": "UploadFromByteArrayAsync", "hasOpenThreats": false}
+          },
+          {
+            "position": {"x": 1040, "y": 80},
+            "size": {"width": 100, "height": 80},
+            "shape": "store",
+            "zIndex": 1,
+            "id": "store-banned-ips",
+            "visible": true,
+            "attrs": {
+              "body": {"stroke": "black", "strokeWidth": 1.5, "fill": "white"},
+              "topLine": {"strokeWidth": 1.5, "strokeDasharray": null},
+              "bottomLine": {"strokeWidth": 1.5, "strokeDasharray": null},
+              "label": {"text": "Banned IP Store", "fontSize": 11, "fill": "black"}
+            },
+            "ports": {
+              "groups": {
+                "top": {"position": "top", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "right": {"position": "right", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "bottom": {"position": "bottom", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "left": {"position": "left", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}}
+              },
+              "items": [
+                {"group": "top", "id": "port-ban-top"},
+                {"group": "right", "id": "port-ban-right"},
+                {"group": "bottom", "id": "port-ban-bottom"},
+                {"group": "left", "id": "port-ban-left"}
+              ]
+            },
+            "data": {"type": "tm.Store", "name": "Banned IP Store", "hasOpenThreats": false}
+          },
+          {
+            "position": {"x": 1040, "y": 240},
+            "size": {"width": 100, "height": 80},
+            "shape": "store",
+            "zIndex": 1,
+            "id": "store-snippets",
+            "visible": true,
+            "attrs": {
+              "body": {"stroke": "black", "strokeWidth": 1.5, "fill": "white"},
+              "topLine": {"strokeWidth": 1.5, "strokeDasharray": null},
+              "bottomLine": {"strokeWidth": 1.5, "strokeDasharray": null},
+              "label": {"text": "Snippet Blobs", "fontSize": 11, "fill": "black"}
+            },
+            "ports": {
+              "groups": {
+                "top": {"position": "top", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "right": {"position": "right", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "bottom": {"position": "bottom", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}},
+                "left": {"position": "left", "attrs": {"circle": {"r": 4, "magnet": true, "stroke": "#5F95FF", "strokeWidth": 1, "fill": "#fff", "style": {"visibility": "hidden"}}}}
+              },
+              "items": [
+                {"group": "top", "id": "port-snippets-top"},
+                {"group": "right", "id": "port-snippets-right"},
+                {"group": "bottom", "id": "port-snippets-bottom"},
+                {"group": "left", "id": "port-snippets-left"}
+              ]
+            },
+            "data": {"type": "tm.Store", "name": "Azure Blob Storage (Snippets)", "hasOpenThreats": false}
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-user-to-endpoint",
+            "visible": true,
+            "source": {"cell": "actor-user", "anchor": {"name": "right"}},
+            "target": {"cell": "process-savesnippet", "anchor": {"name": "left"}},
+            "attrs": {"line": {"stroke": "black", "strokeWidth": 1.5, "targetMarker": {"name": "classic"}}},
+            "labels": [{"markup": [{"tagName": "ellipse", "selector": "labelBody"}, {"tagName": "text", "selector": "labelText"}], "attrs": {"labelText": {"text": "SnippetModel + IP", "textAnchor": "middle", "textVerticalAnchor": "middle"}, "labelBody": {"ref": "labelText", "refRx": "50%", "refRy": "60%", "fill": "#fff", "strokeWidth": 0}}, "position": 0.5}],
+            "data": {"type": "tm.Flow", "name": "DF01", "isResponse": false}
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-endpoint-to-builder",
+            "visible": true,
+            "source": {"cell": "process-savesnippet", "anchor": {"name": "bottom"}},
+            "target": {"cell": "process-snippetbuilder", "anchor": {"name": "top"}},
+            "attrs": {"line": {"stroke": "black", "strokeWidth": 1.5, "targetMarker": {"name": "classic"}}},
+            "labels": [{"markup": [{"tagName": "ellipse", "selector": "labelBody"}, {"tagName": "text", "selector": "labelText"}], "attrs": {"labelText": {"text": "Build View", "textAnchor": "middle", "textVerticalAnchor": "middle"}, "labelBody": {"ref": "labelText", "refRx": "50%", "refRy": "60%", "fill": "#fff", "strokeWidth": 0}}, "position": 0.5}],
+            "data": {"type": "tm.Flow", "name": "DF02", "isResponse": false}
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-builder-to-service",
+            "visible": true,
+            "source": {"cell": "process-snippetbuilder", "anchor": {"name": "bottom"}},
+            "target": {"cell": "process-snippetsservice", "anchor": {"name": "top"}},
+            "attrs": {"line": {"stroke": "black", "strokeWidth": 1.5, "targetMarker": {"name": "classic"}}},
+            "labels": [{"markup": [{"tagName": "ellipse", "selector": "labelBody"}, {"tagName": "text", "selector": "labelText"}], "attrs": {"labelText": {"text": "Serialized Content", "textAnchor": "middle", "textVerticalAnchor": "middle"}, "labelBody": {"ref": "labelText", "refRx": "50%", "refRy": "60%", "fill": "#fff", "strokeWidth": 0}}, "position": 0.5}],
+            "data": {"type": "tm.Flow", "name": "DF03", "isResponse": false}
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-service-check-ban",
+            "visible": true,
+            "source": {"cell": "process-snippetsservice", "anchor": {"name": "right"}},
+            "target": {"cell": "store-banned-ips", "anchor": {"name": "left"}},
+            "attrs": {"line": {"stroke": "black", "strokeWidth": 1.5, "targetMarker": {"name": "classic"}}},
+            "labels": [{"markup": [{"tagName": "ellipse", "selector": "labelBody"}, {"tagName": "text", "selector": "labelText"}], "attrs": {"labelText": {"text": "Check Ban", "textAnchor": "middle", "textVerticalAnchor": "middle"}, "labelBody": {"ref": "labelText", "refRx": "50%", "refRy": "60%", "fill": "#fff", "strokeWidth": 0}}, "position": 0.5}],
+            "data": {"type": "tm.Flow", "name": "DF04", "isResponse": false}
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-service-to-blob",
+            "visible": true,
+            "source": {"cell": "process-snippetsservice", "anchor": {"name": "right"}},
+            "target": {"cell": "process-blobservice", "anchor": {"name": "left"}},
+            "attrs": {"line": {"stroke": "black", "strokeWidth": 1.5, "targetMarker": {"name": "classic"}}},
+            "labels": [{"markup": [{"tagName": "ellipse", "selector": "labelBody"}, {"tagName": "text", "selector": "labelText"}], "attrs": {"labelText": {"text": "Byte Array", "textAnchor": "middle", "textVerticalAnchor": "middle"}, "labelBody": {"ref": "labelText", "refRx": "50%", "refRy": "60%", "fill": "#fff", "strokeWidth": 0}}, "position": 0.5}],
+            "data": {"type": "tm.Flow", "name": "DF05", "isResponse": false}
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-blob-to-store",
+            "visible": true,
+            "source": {"cell": "process-blobservice", "anchor": {"name": "right"}},
+            "target": {"cell": "store-snippets", "anchor": {"name": "left"}},
+            "attrs": {"line": {"stroke": "black", "strokeWidth": 1.5, "targetMarker": {"name": "classic"}}},
+            "labels": [{"markup": [{"tagName": "ellipse", "selector": "labelBody"}, {"tagName": "text", "selector": "labelText"}], "attrs": {"labelText": {"text": "Upload", "textAnchor": "middle", "textVerticalAnchor": "middle"}, "labelBody": {"ref": "labelText", "refRx": "50%", "refRy": "60%", "fill": "#fff", "strokeWidth": 0}}, "position": 0.5}],
+            "data": {"type": "tm.Flow", "name": "DF06", "isResponse": false}
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-response",
+            "visible": true,
+            "source": {"cell": "process-savesnippet", "anchor": {"name": "left"}},
+            "target": {"cell": "actor-user", "anchor": {"name": "right"}},
+            "attrs": {"line": {"stroke": "black", "strokeWidth": 1.5, "sourceMarker": {"name": "classic"}}},
+            "labels": [{"markup": [{"tagName": "ellipse", "selector": "labelBody"}, {"tagName": "text", "selector": "labelText"}], "attrs": {"labelText": {"text": "SnippetId", "textAnchor": "middle", "textVerticalAnchor": "middle"}, "labelBody": {"ref": "labelText", "refRx": "50%", "refRy": "60%", "fill": "#fff", "strokeWidth": 0}}, "position": 0.5}],
+            "data": {"type": "tm.Flow", "name": "DF07", "isResponse": true}
+          }
+        ]
+      }
+    ],
+    "diagramTop": 2,
+    "threatTop": 5
+  }
+}

@@ -6,22 +6,614 @@
     "description": "",
     "id": 0
   },
-  "detail": {
+    "detail": {
     "contributors": [],
     "diagrams": [
       {
-        "id": 0,
-        "title": "New STRIDE diagram",
-        "diagramType": "STRIDE",
-        "placeholder": "New STRIDE diagram description",
-        "thumbnail": "./public/content/images/thumbnail.stride.jpg",
-        "version": "2.6.2",
-        "cells": [],
-        "description": ""
+        "id": 1,
+        "title": "Save Snippet Feature — STRIDE",
+        "diagramType": "Threat Model Diagram",
+        "version": "2.4.1",
+        "cells": [
+          {
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "size": {
+              "width": 400,
+              "height": 480
+            },
+            "shape": "trust-boundary-box",
+            "zIndex": -1,
+            "id": "boundary-browser",
+            "attrs": {
+              "body": {
+                "stroke": "black",
+                "strokeWidth": 2,
+                "fill": "transparent"
+              },
+              "label": {
+                "text": "Browser Runtime",
+                "fontSize": 12,
+                "fill": "black"
+              }
+            },
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "Browser Runtime",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": {
+              "x": 420,
+              "y": 0
+            },
+            "size": {
+              "width": 540,
+              "height": 480
+            },
+            "shape": "trust-boundary-box",
+            "zIndex": -1,
+            "id": "boundary-webapp",
+            "attrs": {
+              "body": {
+                "stroke": "red",
+                "strokeWidth": 2.5,
+                "fill": "transparent"
+              },
+              "label": {
+                "text": "DotNetDojo Web App",
+                "fontSize": 12,
+                "fill": "black"
+              }
+            },
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "DotNetDojo Web App",
+              "isTrustBoundary": true,
+              "hasOpenThreats": true
+            }
+          },
+          {
+            "position": {
+              "x": 1000,
+              "y": 0
+            },
+            "size": {
+              "width": 300,
+              "height": 480
+            },
+            "shape": "trust-boundary-box",
+            "zIndex": -1,
+            "id": "boundary-azure",
+            "attrs": {
+              "body": {
+                "stroke": "black",
+                "strokeWidth": 2,
+                "fill": "transparent",
+                "strokeDasharray": "4 3"
+              },
+              "label": {
+                "text": "Azure Storage",
+                "fontSize": 12,
+                "fill": "black"
+              }
+            },
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "Azure Storage",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false,
+              "outOfScope": true
+            }
+          },
+          {
+            "position": {
+              "x": 60,
+              "y": 120
+            },
+            "size": {
+              "width": 120,
+              "height": 100
+            },
+            "shape": "actor",
+            "zIndex": 3,
+            "id": "actor-user",
+            "attrs": {
+              "body": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "fill": "white"
+              },
+              "label": {
+                "text": "End User",
+                "fontSize": 11,
+                "fill": "black"
+              }
+            },
+            "data": {
+              "type": "tm.Actor",
+              "name": "End User",
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": {
+              "x": 480,
+              "y": 60
+            },
+            "size": {
+              "width": 140,
+              "height": 100
+            },
+            "shape": "process",
+            "zIndex": 5,
+            "id": "process-savesnippet",
+            "attrs": {
+              "body": {
+                "stroke": "red",
+                "strokeWidth": 2.5,
+                "fill": "white"
+              },
+              "label": {
+                "text": "SaveSnippetAsync",
+                "fontSize": 11,
+                "fill": "black"
+              }
+            },
+            "data": {
+              "type": "tm.Process",
+              "name": "SaveSnippetAsync",
+              "hasOpenThreats": true,
+              "threats": [
+                {
+                  "id": "threat-csrf-saveasync",
+                  "title": "SaveAsync Missing CSRF Protection",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Spoofing",
+                  "description": "SaveAsync endpoint lacks [ValidateAntiForgeryToken] attribute, allowing CSRF attacks on public POST endpoint",
+                  "mitigation": "Add [ValidateAntiForgeryToken] decorator to SaveAsync method",
+                  "modelType": "STRIDE",
+                  "number": 1,
+                  "score": "8.2"
+                },
+                {
+                  "id": "threat-malicious-code",
+                  "title": "Malicious Code Submission",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Abuse",
+                  "description": "User can submit arbitrary C# code that exploits RazorParser sandbox or downstream consumers",
+                  "mitigation": "Validate snippet syntax, restrict dangerous namespaces, enforce parser sandbox execution",
+                  "modelType": "STRIDE",
+                  "number": 2,
+                  "score": "6.5"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 480,
+              "y": 200
+            },
+            "size": {
+              "width": 140,
+              "height": 100
+            },
+            "shape": "process",
+            "zIndex": 5,
+            "id": "process-snippetbuilder",
+            "attrs": {
+              "body": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "fill": "white"
+              },
+              "label": {
+                "text": "SnippetBuilder",
+                "fontSize": 11,
+                "fill": "black"
+              }
+            },
+            "data": {
+              "type": "tm.Process",
+              "name": "SnippetBuilder.BuildView",
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": {
+              "x": 480,
+              "y": 340
+            },
+            "size": {
+              "width": 140,
+              "height": 100
+            },
+            "shape": "process",
+            "zIndex": 5,
+            "id": "process-snippetsservice",
+            "attrs": {
+              "body": {
+                "stroke": "red",
+                "strokeWidth": 2.5,
+                "fill": "white"
+              },
+              "label": {
+                "text": "SnippetsService",
+                "fontSize": 11,
+                "fill": "black"
+              }
+            },
+            "data": {
+              "type": "tm.Process",
+              "name": "CreateSnippetAsync",
+              "hasOpenThreats": true,
+              "threats": [
+                {
+                  "id": "threat-ip-spoofing",
+                  "title": "IP Spoofing for Rate Limit Bypass",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Spoofing",
+                  "description": "X-Forwarded-For or RemoteIpAddress can be spoofed if reverse proxy not properly configured",
+                  "mitigation": "Validate IP through trusted reverse proxy only; implement rate limiting at infrastructure level",
+                  "modelType": "STRIDE",
+                  "number": 3,
+                  "score": "6.8"
+                },
+                {
+                  "id": "threat-no-audit",
+                  "title": "No Audit Trail",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Repudiation",
+                  "description": "Snippet creation not logged; cannot audit who created what snippet and when",
+                  "mitigation": "Log all snippet creations with IP, timestamp, content hash to audit trail",
+                  "modelType": "STRIDE",
+                  "number": 4,
+                  "score": "5.5"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 720,
+              "y": 340
+            },
+            "size": {
+              "width": 140,
+              "height": 100
+            },
+            "shape": "process",
+            "zIndex": 5,
+            "id": "process-blobservice",
+            "attrs": {
+              "body": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "fill": "white"
+              },
+              "label": {
+                "text": "BlobStorageService",
+                "fontSize": 11,
+                "fill": "black"
+              }
+            },
+            "data": {
+              "type": "tm.Process",
+              "name": "UploadFromByteArrayAsync",
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": {
+              "x": 1040,
+              "y": 80
+            },
+            "size": {
+              "width": 100,
+              "height": 80
+            },
+            "shape": "store",
+            "zIndex": 1,
+            "id": "store-banned-ips",
+            "attrs": {
+              "body": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "fill": "white"
+              },
+              "label": {
+                "text": "Banned IP Store",
+                "fontSize": 11,
+                "fill": "black"
+              }
+            },
+            "data": {
+              "type": "tm.Store",
+              "name": "Banned IP Store",
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": {
+              "x": 1040,
+              "y": 240
+            },
+            "size": {
+              "width": 100,
+              "height": 80
+            },
+            "shape": "store",
+            "zIndex": 1,
+            "id": "store-snippets",
+            "attrs": {
+              "body": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "fill": "white"
+              },
+              "label": {
+                "text": "Snippet Blobs",
+                "fontSize": 11,
+                "fill": "black"
+              }
+            },
+            "data": {
+              "type": "tm.Store",
+              "name": "Azure Blob Storage (Snippets)",
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-user-to-endpoint",
+            "source": {
+              "cell": "actor-user",
+              "anchor": {
+                "name": "right"
+              }
+            },
+            "target": {
+              "cell": "process-savesnippet",
+              "anchor": {
+                "name": "left"
+              }
+            },
+            "attrs": {
+              "line": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "targetMarker": {
+                  "name": "classic"
+                }
+              },
+              "label": {
+                "text": "SnippetModel + IP"
+              }
+            },
+            "data": {
+              "type": "tm.Flow",
+              "name": "DF01",
+              "isResponse": false
+            }
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-endpoint-to-builder",
+            "source": {
+              "cell": "process-savesnippet",
+              "anchor": {
+                "name": "bottom"
+              }
+            },
+            "target": {
+              "cell": "process-snippetbuilder",
+              "anchor": {
+                "name": "top"
+              }
+            },
+            "attrs": {
+              "line": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "targetMarker": {
+                  "name": "classic"
+                }
+              },
+              "label": {
+                "text": "Build View"
+              }
+            },
+            "data": {
+              "type": "tm.Flow",
+              "name": "DF02",
+              "isResponse": false
+            }
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-builder-to-service",
+            "source": {
+              "cell": "process-snippetbuilder",
+              "anchor": {
+                "name": "bottom"
+              }
+            },
+            "target": {
+              "cell": "process-snippetsservice",
+              "anchor": {
+                "name": "top"
+              }
+            },
+            "attrs": {
+              "line": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "targetMarker": {
+                  "name": "classic"
+                }
+              },
+              "label": {
+                "text": "Serialized Content"
+              }
+            },
+            "data": {
+              "type": "tm.Flow",
+              "name": "DF03",
+              "isResponse": false
+            }
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-service-check-ban",
+            "source": {
+              "cell": "process-snippetsservice",
+              "anchor": {
+                "name": "right"
+              }
+            },
+            "target": {
+              "cell": "store-banned-ips",
+              "anchor": {
+                "name": "left"
+              }
+            },
+            "attrs": {
+              "line": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "targetMarker": {
+                  "name": "classic"
+                }
+              },
+              "label": {
+                "text": "Check Ban"
+              }
+            },
+            "data": {
+              "type": "tm.Flow",
+              "name": "DF04",
+              "isResponse": false
+            }
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-service-to-blob",
+            "source": {
+              "cell": "process-snippetsservice",
+              "anchor": {
+                "name": "right"
+              }
+            },
+            "target": {
+              "cell": "process-blobservice",
+              "anchor": {
+                "name": "left"
+              }
+            },
+            "attrs": {
+              "line": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "targetMarker": {
+                  "name": "classic"
+                }
+              },
+              "label": {
+                "text": "Byte Array"
+              }
+            },
+            "data": {
+              "type": "tm.Flow",
+              "name": "DF05",
+              "isResponse": false
+            }
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-blob-to-store",
+            "source": {
+              "cell": "process-blobservice",
+              "anchor": {
+                "name": "right"
+              }
+            },
+            "target": {
+              "cell": "store-snippets",
+              "anchor": {
+                "name": "left"
+              }
+            },
+            "attrs": {
+              "line": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "targetMarker": {
+                  "name": "classic"
+                }
+              },
+              "label": {
+                "text": "Upload"
+              }
+            },
+            "data": {
+              "type": "tm.Flow",
+              "name": "DF06",
+              "isResponse": false
+            }
+          },
+          {
+            "shape": "flow",
+            "zIndex": 10,
+            "id": "flow-response",
+            "source": {
+              "cell": "process-savesnippet",
+              "anchor": {
+                "name": "left"
+              }
+            },
+            "target": {
+              "cell": "actor-user",
+              "anchor": {
+                "name": "right"
+              }
+            },
+            "attrs": {
+              "line": {
+                "stroke": "black",
+                "strokeWidth": 1.5,
+                "sourceMarker": {
+                  "name": "classic"
+                }
+              },
+              "label": {
+                "text": "SnippetId"
+              }
+            },
+            "data": {
+              "type": "tm.Flow",
+              "name": "DF07",
+              "isResponse": true
+            }
+          }
+        ]
       }
     ],
-    "diagramTop": 1,
-    "reviewer": "",
-    "threatTop": 0
+    "diagramTop": 2,
+    "threatTop": 5
   }
 }
