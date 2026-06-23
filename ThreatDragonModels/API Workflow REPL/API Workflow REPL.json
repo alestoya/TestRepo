@@ -1,0 +1,861 @@
+{
+  "id": 2,
+  "title": "REST API Authentication Flow",
+  "diagramType": "STRIDE",
+  "version": "2.2.0",
+  "cells": [
+    {
+      "id": "0f2c6f6b-2fd4-4c67-9f8d-1e7e6dc1a101",
+      "shape": "trust-boundary-box",
+      "attrs": {
+        "body": {
+          "stroke": "black",
+          "strokeWidth": 2,
+          "fill": "transparent"
+        },
+        "label": {
+          "text": "Client Browser",
+          "fontSize": 12,
+          "fill": "black"
+        }
+      },
+      "data": {
+        "type": "tm.BoundaryBox",
+        "name": "Client Browser",
+        "isTrustBoundary": true,
+        "hasOpenThreats": false
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "width": 360,
+        "height": 660
+      },
+      "zIndex": -1
+    },
+    {
+      "id": "4b53426b-5b87-4f36-a39f-52a6bf00a102",
+      "shape": "trust-boundary-box",
+      "attrs": {
+        "body": {
+          "stroke": "black",
+          "strokeWidth": 2,
+          "fill": "transparent"
+        },
+        "label": {
+          "text": "DotNetDojo Web App",
+          "fontSize": 12,
+          "fill": "black"
+        }
+      },
+      "data": {
+        "type": "tm.BoundaryBox",
+        "name": "DotNetDojo Web App",
+        "isTrustBoundary": true,
+        "hasOpenThreats": false
+      },
+      "position": {
+        "x": 360,
+        "y": 0
+      },
+      "size": {
+        "width": 660,
+        "height": 660
+      },
+      "zIndex": -1
+    },
+    {
+      "id": "9a7dd9a0-8f87-4299-84d5-2a3dd5d8a103",
+      "shape": "trust-boundary-box",
+      "attrs": {
+        "body": {
+          "stroke": "black",
+          "strokeWidth": 2,
+          "fill": "transparent"
+        },
+        "label": {
+          "text": "Reverse Proxy Channel",
+          "fontSize": 12,
+          "fill": "black"
+        }
+      },
+      "data": {
+        "type": "tm.BoundaryBox",
+        "name": "Reverse Proxy Channel",
+        "isTrustBoundary": true,
+        "hasOpenThreats": false
+      },
+      "position": {
+        "x": 1020,
+        "y": 0
+      },
+      "size": {
+        "width": 360,
+        "height": 660
+      },
+      "zIndex": -1
+    },
+    {
+      "id": "c8381db4-5e17-4fc9-8ad8-00a58feea104",
+      "shape": "trust-boundary-box",
+      "attrs": {
+        "body": {
+          "stroke": "black",
+          "strokeWidth": 2,
+          "fill": "transparent"
+        },
+        "label": {
+          "text": "Razor Parser Service Runtime",
+          "fontSize": 12,
+          "fill": "black"
+        }
+      },
+      "data": {
+        "type": "tm.BoundaryBox",
+        "name": "Razor Parser Service Runtime",
+        "isTrustBoundary": true,
+        "hasOpenThreats": false
+      },
+      "position": {
+        "x": 1380,
+        "y": 0
+      },
+      "size": {
+        "width": 360,
+        "height": 660
+      },
+      "zIndex": -1
+    },
+    {
+      "id": "31f0fa35-1b93-41dc-9f58-e9b4e445a105",
+      "shape": "store",
+      "attrs": {
+        "body": {
+          "stroke": "black",
+          "strokeWidth": 1.5,
+          "fill": "white"
+        },
+        "label": {
+          "text": "Antiforgery Token Store",
+          "fontSize": 11,
+          "fill": "black"
+        }
+      },
+      "data": {
+        "type": "tm.Store",
+        "name": "Antiforgery Token Store",
+        "hasOpenThreats": false,
+        "threats": []
+      },
+      "position": {
+        "x": 120,
+        "y": 120
+      },
+      "size": {
+        "width": 160,
+        "height": 80
+      },
+      "zIndex": 1
+    },
+    {
+      "id": "6a43f2a8-50a5-4e76-a077-a6be3233a106",
+      "shape": "store",
+      "attrs": {
+        "body": {
+          "stroke": "black",
+          "strokeWidth": 1.5,
+          "fill": "white"
+        },
+        "label": {
+          "text": "Allowed Host Configuration",
+          "fontSize": 11,
+          "fill": "black"
+        }
+      },
+      "data": {
+        "type": "tm.Store",
+        "name": "Allowed Host Configuration",
+        "hasOpenThreats": false,
+        "threats": []
+      },
+      "position": {
+        "x": 660,
+        "y": 60
+      },
+      "size": {
+        "width": 180,
+        "height": 80
+      },
+      "zIndex": 1
+    },
+    {
+      "id": "7df8e321-8f4e-49f8-9b8b-df9ab1b8a107",
+      "shape": "actor",
+      "attrs": {
+        "body": {
+          "stroke": "black",
+          "strokeWidth": 1.5,
+          "fill": "white"
+        },
+        "label": {
+          "text": "Anonymous Internet User",
+          "fontSize": 11,
+          "fill": "black"
+        }
+      },
+      "data": {
+        "type": "tm.Actor",
+        "name": "Anonymous Internet User",
+        "hasOpenThreats": false,
+        "threats": []
+      },
+      "position": {
+        "x": 60,
+        "y": 480
+      },
+      "size": {
+        "width": 180,
+        "height": 100
+      },
+      "zIndex": 3
+    },
+    {
+      "id": "a4fdd1db-7ec2-4670-ac24-bdb9fc15a108",
+      "shape": "actor",
+      "attrs": {
+        "body": {
+          "stroke": "black",
+          "strokeWidth": 1.5,
+          "fill": "white"
+        },
+        "label": {
+          "text": "Session-bearing User",
+          "fontSize": 11,
+          "fill": "black"
+        }
+      },
+      "data": {
+        "type": "tm.Actor",
+        "name": "Session-bearing User",
+        "hasOpenThreats": false,
+        "threats": []
+      },
+      "position": {
+        "x": 60,
+        "y": 360
+      },
+      "size": {
+        "width": 180,
+        "height": 100
+      },
+      "zIndex": 3
+    },
+    {
+      "id": "5d19b718-3ea2-4bc2-9c37-7d61fc2aa109",
+      "shape": "actor",
+      "attrs": {
+        "body": {
+          "stroke": "black",
+          "strokeWidth": 1.5,
+          "fill": "white"
+        },
+        "label": {
+          "text": "DevOps Operator",
+          "fontSize": 11,
+          "fill": "black"
+        }
+      },
+      "data": {
+        "type": "tm.Actor",
+        "name": "DevOps Operator",
+        "hasOpenThreats": false,
+        "threats": []
+      },
+      "position": {
+        "x": 540,
+        "y": 240
+      },
+      "size": {
+        "width": 140,
+        "height": 100
+      },
+      "zIndex": 3
+    },
+    {
+      "id": "09117d5e-df8a-4ef4-8afb-b0e953f8a110",
+      "shape": "process",
+      "attrs": {
+        "body": {
+          "stroke": "red",
+          "strokeWidth": 2.5,
+          "fill": "white"
+        },
+        "label": {
+          "text": "Browser Token Injector",
+          "fontSize": 11,
+          "fill": "black"
+        }
+      },
+      "data": {
+        "type": "tm.Process",
+        "name": "Browser Token Injector",
+        "hasOpenThreats": true,
+        "threats": [
+          {
+            "id": "3c7e3f61-9d9f-45aa-9d2f-8349df888001",
+            "title": "Token Exfiltration via Script Compromise",
+            "status": "Open",
+            "severity": "High",
+            "type": "Information Disclosure",
+            "number": 1,
+            "score": "8.1",
+            "description": "The antiforgery request token is accessible in the DOM. If same-origin script execution is compromised, the token can be stolen.",
+            "mitigation": "",
+            "modelType": "Threat"
+          },
+          {
+            "id": "8d8ccbf3-bf9d-4d91-b09a-2cd04751c002",
+            "title": "Token Header Stripping",
+            "status": "Mitigated",
+            "severity": "Medium",
+            "type": "Tampering",
+            "number": 2,
+            "score": "5.3",
+            "description": "Requests could be sent without RequestVerificationToken header.",
+            "mitigation": "Server-side ValidateAntiForgeryToken rejects missing or invalid tokens on protected endpoints.",
+            "modelType": "Threat"
+          }
+        ]
+      },
+      "position": {
+        "x": 120,
+        "y": 240
+      },
+      "size": {
+        "width": 180,
+        "height": 100
+      },
+      "zIndex": 5
+    },
+    {
+      "id": "c45a6b59-0ef6-48e8-8ad7-c8e778d5a111",
+      "shape": "process",
+      "attrs": {
+        "body": {
+          "stroke": "red",
+          "strokeWidth": 2.5,
+          "fill": "white"
+        },
+        "label": {
+          "text": "SnippetController Token Validation",
+          "fontSize": 11,
+          "fill": "black"
+        }
+      },
+      "data": {
+        "type": "tm.Process",
+        "name": "SnippetController Token Validation",
+        "hasOpenThreats": true,
+        "threats": [
+          {
+            "id": "1f4d0a2c-bf87-44e5-9584-2a03b8c4c003",
+            "title": "Unprotected Save Endpoint CSRF",
+            "status": "Open",
+            "severity": "High",
+            "type": "Spoofing",
+            "number": 3,
+            "score": "8.3",
+            "description": "SaveAsync accepts POST input without ValidateAntiForgeryToken.",
+            "mitigation": "",
+            "modelType": "Threat"
+          },
+          {
+            "id": "7a18d2c9-5ac4-4a69-a3d3-6e0a93fdc004",
+            "title": "CSRF on Protected Endpoints",
+            "status": "Mitigated",
+            "severity": "Low",
+            "type": "Spoofing",
+            "number": 4,
+            "score": "3.1",
+            "description": "Mutating endpoints could be targeted by CSRF attacks.",
+            "mitigation": "ValidateAntiForgeryToken is present on ParseSnippetAsync and SaveSnippetAsync.",
+            "modelType": "Threat"
+          }
+        ]
+      },
+      "position": {
+        "x": 420,
+        "y": 300
+      },
+      "size": {
+        "width": 220,
+        "height": 100
+      },
+      "zIndex": 5
+    },
+    {
+      "id": "1fc6ae66-3a53-4f83-ab2e-bf4cc30d8a112",
+      "shape": "process",
+      "attrs": {
+        "body": {
+          "stroke": "red",
+          "strokeWidth": 2.5,
+          "fill": "white"
+        },
+        "label": {
+          "text": "Web RestrictDomain Filter",
+          "fontSize": 11,
+          "fill": "black"
+        }
+      },
+      "data": {
+        "type": "tm.Process",
+        "name": "Web RestrictDomain Filter",
+        "hasOpenThreats": true,
+        "threats": [
+          {
+            "id": "b2e4c0c5-72ad-4e3a-a327-7ef6d1a6c005",
+            "title": "Host Header Trust Bypass",
+            "status": "Open",
+            "severity": "High",
+            "type": "Spoofing",
+            "number": 5,
+            "score": "7.7",
+            "description": "Authorization depends on host allowlist checks. Proxy misconfiguration can permit spoofed host values.",
+            "mitigation": "",
+            "modelType": "Threat"
+          },
+          {
+            "id": "c9fa9058-0db7-4de6-aa4a-58b2f316c006",
+            "title": "Insufficient Host-Reject Audit Trail",
+            "status": "Open",
+            "severity": "Medium",
+            "type": "Repudiation",
+            "number": 6,
+            "score": "5.9",
+            "description": "Rejected host attempts are not consistently logged for forensic attribution.",
+            "mitigation": "",
+            "modelType": "Threat"
+          }
+        ]
+      },
+      "position": {
+        "x": 720,
+        "y": 300
+      },
+      "size": {
+        "width": 180,
+        "height": 100
+      },
+      "zIndex": 5
+    },
+    {
+      "id": "2c6d3d9f-17ca-4f03-bf87-2cf9a3931a113",
+      "shape": "process",
+      "attrs": {
+        "body": {
+          "stroke": "red",
+          "strokeWidth": 2.5,
+          "fill": "white"
+        },
+        "label": {
+          "text": "YARP Proxy Host Gate",
+          "fontSize": 11,
+          "fill": "black"
+        }
+      },
+      "data": {
+        "type": "tm.Process",
+        "name": "YARP Proxy Host Gate",
+        "hasOpenThreats": true,
+        "threats": [
+          {
+            "id": "f13a7f45-b26a-4ca0-90fd-e8f1f3ecb007",
+            "title": "Proxy Route Feature Abuse",
+            "status": "Open",
+            "severity": "Medium",
+            "type": "Abuse",
+            "number": 7,
+            "score": "6.1",
+            "description": "The proxy catch-all route can be used for parser endpoint probing from allowed domains.",
+            "mitigation": "",
+            "modelType": "Threat"
+          },
+          {
+            "id": "2b20df4b-f719-4d95-a80c-cf5fd637f008",
+            "title": "Proxy Flooding",
+            "status": "Mitigated",
+            "severity": "Low",
+            "type": "Denial of Service",
+            "number": 8,
+            "score": "3.7",
+            "description": "High-volume proxy requests can degrade parser availability.",
+            "mitigation": "IP rate limiting middleware is applied before endpoint execution.",
+            "modelType": "Threat"
+          }
+        ]
+      },
+      "position": {
+        "x": 1080,
+        "y": 300
+      },
+      "size": {
+        "width": 180,
+        "height": 100
+      },
+      "zIndex": 5
+    },
+    {
+      "id": "f9d9d8c7-58d8-4e4a-8fdd-b8c0ab464a114",
+      "shape": "process",
+      "attrs": {
+        "body": {
+          "stroke": "red",
+          "strokeWidth": 2.5,
+          "fill": "white"
+        },
+        "label": {
+          "text": "RazorParser RestrictDomain Filter",
+          "fontSize": 11,
+          "fill": "black"
+        }
+      },
+      "data": {
+        "type": "tm.Process",
+        "name": "RazorParser RestrictDomain Filter",
+        "hasOpenThreats": true,
+        "threats": [
+          {
+            "id": "4d6fb0f7-4ce2-4592-8f80-0c0dadc9a009",
+            "title": "Missing Strong Service Auth",
+            "status": "Open",
+            "severity": "Medium",
+            "type": "Spoofing",
+            "number": 9,
+            "score": "6.4",
+            "description": "Web-to-parser trust is host-based without independent service authentication assertion.",
+            "mitigation": "",
+            "modelType": "Threat"
+          }
+        ]
+      },
+      "position": {
+        "x": 1440,
+        "y": 300
+      },
+      "size": {
+        "width": 220,
+        "height": 100
+      },
+      "zIndex": 5
+    },
+    {
+      "id": "16c69557-22cf-4bc1-bf4d-0d6f2a58ca21",
+      "shape": "flow",
+      "attrs": {
+        "line": {
+          "stroke": "black",
+          "strokeWidth": 2,
+          "targetMarker": {
+            "name": "block",
+            "width": 12,
+            "height": 12
+          }
+        },
+        "label": {
+          "text": "Token issuance",
+          "fontSize": 10,
+          "fill": "black"
+        }
+      },
+      "source": {
+        "cell": "31f0fa35-1b93-41dc-9f58-e9b4e445a105"
+      },
+      "target": {
+        "cell": "09117d5e-df8a-4ef4-8afb-b0e953f8a110"
+      },
+      "vertices": [],
+      "data": {
+        "type": "tm.Flow",
+        "name": "DF01 Token issuance",
+        "isBidirectional": false,
+        "hasOpenThreats": false
+      },
+      "zIndex": 10
+    },
+    {
+      "id": "65eb6e99-8923-48ae-aa6f-d3d7a65caa22",
+      "shape": "flow",
+      "attrs": {
+        "line": {
+          "stroke": "black",
+          "strokeWidth": 2,
+          "targetMarker": {
+            "name": "block",
+            "width": 12,
+            "height": 12
+          }
+        },
+        "label": {
+          "text": "POST with antiforgery header",
+          "fontSize": 10,
+          "fill": "black"
+        }
+      },
+      "source": {
+        "cell": "09117d5e-df8a-4ef4-8afb-b0e953f8a110"
+      },
+      "target": {
+        "cell": "c45a6b59-0ef6-48e8-8ad7-c8e778d5a111"
+      },
+      "vertices": [],
+      "data": {
+        "type": "tm.Flow",
+        "name": "DF02 Browser to snippet API",
+        "isBidirectional": false,
+        "hasOpenThreats": false
+      },
+      "zIndex": 10
+    },
+    {
+      "id": "5753561e-2f29-42ea-b95e-4c3fcc8d8a23",
+      "shape": "flow",
+      "attrs": {
+        "line": {
+          "stroke": "black",
+          "strokeWidth": 2,
+          "targetMarker": {
+            "name": "block",
+            "width": 12,
+            "height": 12
+          }
+        },
+        "label": {
+          "text": "Incoming API request",
+          "fontSize": 10,
+          "fill": "black"
+        }
+      },
+      "source": {
+        "cell": "7df8e321-8f4e-49f8-9b8b-df9ab1b8a107"
+      },
+      "target": {
+        "cell": "1fc6ae66-3a53-4f83-ab2e-bf4cc30d8a112"
+      },
+      "vertices": [],
+      "data": {
+        "type": "tm.Flow",
+        "name": "DF03 Anonymous request",
+        "isBidirectional": false,
+        "hasOpenThreats": false
+      },
+      "zIndex": 10
+    },
+    {
+      "id": "22e6fc13-cce4-4de2-9733-2c53e9be8a24",
+      "shape": "flow",
+      "attrs": {
+        "line": {
+          "stroke": "black",
+          "strokeWidth": 2,
+          "targetMarker": {
+            "name": "block",
+            "width": 12,
+            "height": 12
+          }
+        },
+        "label": {
+          "text": "Session request path",
+          "fontSize": 10,
+          "fill": "black"
+        }
+      },
+      "source": {
+        "cell": "a4fdd1db-7ec2-4670-ac24-bdb9fc15a108"
+      },
+      "target": {
+        "cell": "1fc6ae66-3a53-4f83-ab2e-bf4cc30d8a112"
+      },
+      "vertices": [],
+      "data": {
+        "type": "tm.Flow",
+        "name": "DF04 Session request",
+        "isBidirectional": false,
+        "hasOpenThreats": false
+      },
+      "zIndex": 10
+    },
+    {
+      "id": "55229b0c-a6ea-4fb0-b149-489c0d6d7a25",
+      "shape": "flow",
+      "attrs": {
+        "line": {
+          "stroke": "black",
+          "strokeWidth": 2,
+          "targetMarker": {
+            "name": "block",
+            "width": 12,
+            "height": 12
+          }
+        },
+        "label": {
+          "text": "Allowlist lookup",
+          "fontSize": 10,
+          "fill": "black"
+        }
+      },
+      "source": {
+        "cell": "6a43f2a8-50a5-4e76-a077-a6be3233a106"
+      },
+      "target": {
+        "cell": "1fc6ae66-3a53-4f83-ab2e-bf4cc30d8a112"
+      },
+      "vertices": [],
+      "data": {
+        "type": "tm.Flow",
+        "name": "DF05 Host allowlist lookup web filter",
+        "isBidirectional": false,
+        "hasOpenThreats": false
+      },
+      "zIndex": 10
+    },
+    {
+      "id": "ebd72f79-3ef6-4db6-ae6c-c79f99795a26",
+      "shape": "flow",
+      "attrs": {
+        "line": {
+          "stroke": "black",
+          "strokeWidth": 2,
+          "targetMarker": {
+            "name": "block",
+            "width": 12,
+            "height": 12
+          }
+        },
+        "label": {
+          "text": "Forward to proxy path",
+          "fontSize": 10,
+          "fill": "black"
+        }
+      },
+      "source": {
+        "cell": "1fc6ae66-3a53-4f83-ab2e-bf4cc30d8a112"
+      },
+      "target": {
+        "cell": "2c6d3d9f-17ca-4f03-bf87-2cf9a3931a113"
+      },
+      "vertices": [],
+      "data": {
+        "type": "tm.Flow",
+        "name": "DF06 To reverse proxy gate",
+        "isBidirectional": false,
+        "hasOpenThreats": false
+      },
+      "zIndex": 10
+    },
+    {
+      "id": "5806582f-cf81-4786-8ab6-7fd06cf55327",
+      "shape": "flow",
+      "attrs": {
+        "line": {
+          "stroke": "black",
+          "strokeWidth": 2,
+          "targetMarker": {
+            "name": "block",
+            "width": 12,
+            "height": 12
+          }
+        },
+        "label": {
+          "text": "Proxy to parser request",
+          "fontSize": 10,
+          "fill": "black"
+        }
+      },
+      "source": {
+        "cell": "2c6d3d9f-17ca-4f03-bf87-2cf9a3931a113"
+      },
+      "target": {
+        "cell": "f9d9d8c7-58d8-4e4a-8fdd-b8c0ab464a114"
+      },
+      "vertices": [],
+      "data": {
+        "type": "tm.Flow",
+        "name": "DF07 Proxy to parser",
+        "isBidirectional": false,
+        "hasOpenThreats": false
+      },
+      "zIndex": 10
+    },
+    {
+      "id": "d2f6bbaa-91ff-44ec-b4f5-5fecf2697a28",
+      "shape": "flow",
+      "attrs": {
+        "line": {
+          "stroke": "black",
+          "strokeWidth": 2,
+          "targetMarker": {
+            "name": "block",
+            "width": 12,
+            "height": 12
+          }
+        },
+        "label": {
+          "text": "Allowlist maintenance",
+          "fontSize": 10,
+          "fill": "black"
+        }
+      },
+      "source": {
+        "cell": "5d19b718-3ea2-4bc2-9c37-7d61fc2aa109"
+      },
+      "target": {
+        "cell": "6a43f2a8-50a5-4e76-a077-a6be3233a106"
+      },
+      "vertices": [],
+      "data": {
+        "type": "tm.Flow",
+        "name": "DF08 Config updates",
+        "isBidirectional": false,
+        "hasOpenThreats": false
+      },
+      "zIndex": 10
+    },
+    {
+      "id": "80b15cf3-1f6d-4388-b8b2-12b295f90929",
+      "shape": "flow",
+      "attrs": {
+        "line": {
+          "stroke": "black",
+          "strokeWidth": 2,
+          "targetMarker": {
+            "name": "block",
+            "width": 12,
+            "height": 12
+          }
+        },
+        "label": {
+          "text": "Host-checked request dispatch",
+          "fontSize": 10,
+          "fill": "black"
+        }
+      },
+      "source": {
+        "cell": "1fc6ae66-3a53-4f83-ab2e-bf4cc30d8a112"
+      },
+      "target": {
+        "cell": "c45a6b59-0ef6-48e8-8ad7-c8e778d5a111"
+      },
+      "vertices": [],
+      "data": {
+        "type": "tm.Flow",
+        "name": "DF09 Filtered request to controller",
+        "isBidirectional": false,
+        "hasOpenThreats": false
+      },
+      "zIndex": 10
+    }
+  ]
+}
